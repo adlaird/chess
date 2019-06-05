@@ -10,12 +10,16 @@ export class AppComponent {
   chessGame: any;
   moves: any;
   legalMoves: any;
+  turn: any;
+
+  playerWhite: any;
+  playerBlack: any;
 
   startGame(): void {
-    alert('start game');
     this.chessGame = new Chess();
 
     this.legalMoves = this.chessGame.moves();
+    this.turn = this.chessGame.turn();
 
     // while (!this.chessGame.game_over()) {
     //   var moves = this.chessGame.moves();

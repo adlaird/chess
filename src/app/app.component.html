@@ -1,6 +1,11 @@
-<button (click)="startGame()">Start Game</button>
+<div class="row">
+  <div class="col-md-12">
+    <button class="btn-success" (click)="startGame()">Start Game</button>
+  </div>
+</div>
 
 <h1 *ngIf="legalMoves">Legal Moves</h1>
 <pre>{{ legalMoves }}</pre>
+<pre>Turn: {{ turn }}</pre>
 
 <router-outlet></router-outlet>
