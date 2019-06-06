@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
 import Chess from '../../node_modules/chess.js';
+import { RandomPlayer } from './players/randomPlayer.js';
+import { FirstMovePlayer } from './players/firstMovePlayer.js';
+import { IPlayer } from './players/IPlayer';
+
+const WHITE: string = 'w',
+    BLACK: string = 'b';
 
 @Component({
   selector: 'app-root',
@@ -16,15 +22,29 @@ export class AppComponent {
   playerBlack: any;
 
   startGame(): void {
+    this.playerWhite = new RandomPlayer();
+    this.playerBlack = new FirstMovePlayer();
+
     this.chessGame = new Chess();
 
     this.legalMoves = this.chessGame.moves();
     this.turn = this.chessGame.turn();
 
-    // while (!this.chessGame.game_over()) {
-    //   var moves = this.chessGame.moves();
-    //   var move = moves[Math.floor(Math.random() * moves.length)];
-    //   this.chessGame.move(move);
-    // }
+    let moveCount = 0;
+
+    while (!this.chessGame.game_over() && moveCount < 100) {
+      const moves = this.chessGame.moves();
+      let move;
+debugger;
+      if (this.turn === WHITE) {
+        move = this.playerWhite.chooseMove(moves)
+      } else {
+        move = this.playerBlack.chooseMove(moves);
+      }
+      
+      this.moves += ' ' + move;
+      this.chessGame.move(move);
+      moveCount++;
+    }
   }
 }
