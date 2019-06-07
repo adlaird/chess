@@ -5,9 +5,6 @@ import { FirstMovePlayer } from './players/firstMovePlayer.js';
 import { IPlayer } from './players/IPlayer';
 
 
-// import * as stockfish from '../../node_modules/stockfish';
-
-
 const WHITE: string = 'w',
     BLACK: string = 'b';
 
@@ -21,7 +18,6 @@ export class AppComponent {
   fen: any;
   moves: any;
   legalMoves: any;
-  // stockfish = new stockfish();
   turn: any;
 
   playerWhite: any;
@@ -52,23 +48,19 @@ export class AppComponent {
       this.chessGame.move(move);
       moveCount++;
       if(moveCount === 30) {
-        debugger;
         this.fen = this.chessGame.fen();
       }
     }
-debugger;
+
     var stockfish = new Worker('stockfish.js');
     
     stockfish.onmessage = function onmessage(event) {
       console.log(event.data);
     };
 
+    stockfish.postMessage('ucinewgame');
     stockfish.postMessage(`position fen ${this.fen}`);
     stockfish.postMessage('go depth 5');
-
-    setTimeout(() => {
-      stockfish.terminate();
-    }, 10000)
     
   }
 }

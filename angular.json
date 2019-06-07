@@ -25,7 +25,11 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "node_modules/stockfish"
+              { "glob": "stockfish.wasm", "input": "node_modules/stockfish/src", "output": "./" }
+            ],
+            "scripts": [
+              { "input": "node_modules/stockfish/src/stockfish.js", "bundleName": "stockfish"  },
+              { "input": "node_modules/stockfish/src/stockfish.asm.js", "bundleName": "stockfish.asm" }
             ],
             "styles": [
               "src/styles.scss"
