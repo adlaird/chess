@@ -14,6 +14,7 @@ const WHITE: string = 'w',
 })
 export class AppComponent {
   chessGame: any;
+  fen: any;
   moves: any;
   legalMoves: any;
   turn: any;
@@ -35,7 +36,7 @@ export class AppComponent {
     while (!this.chessGame.game_over() && moveCount < 100) {
       const moves = this.chessGame.moves();
       let move;
-debugger;
+
       if (this.turn === WHITE) {
         move = this.playerWhite.chooseMove(moves)
       } else {
@@ -45,6 +46,10 @@ debugger;
       this.moves += ' ' + move;
       this.chessGame.move(move);
       moveCount++;
+      if(moveCount === 30) {
+        debugger;
+        this.fen = this.chessGame.fen();
+      }
     }
   }
 }
