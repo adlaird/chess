@@ -10,5 +10,6 @@
 
 <div> {{ moves }} </div>
 <div> fen: {{ fen }} </div>
+<span *ngFor="let item of generateArray(100); let i = index;" class="result"> </span>
 
 <router-outlet></router-outlet>

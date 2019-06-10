@@ -16,12 +16,17 @@ const WHITE: string = 'w',
 export class AppComponent {
   chessGame: any;
   fen: any;
+  gameResult: string;
   moves: any;
   legalMoves: any;
   turn: any;
 
   playerWhite: any;
   playerBlack: any;
+
+  generateArray(n: number) {
+    return Array(n);
+  }
 
   startGame(): void {
     this.playerWhite = new RandomPlayer();
@@ -55,7 +60,19 @@ export class AppComponent {
     var stockfish = new Worker('stockfish.js');
     
     stockfish.onmessage = function onmessage(event) {
-      console.log(event.data);
+      const message: string = event.data;
+
+      if (message.startsWith('info depth 5')) {
+        const resultSpans = Array.from(document.getElementsByClassName('result'));
+
+        for (let result of resultSpans) {
+          if (result.innerHTML == '')
+          {
+            result.innerHTML = message.split(' ')[9];
+            break;
+          }
+        }
+      }
     };
 
     stockfish.postMessage('ucinewgame');
