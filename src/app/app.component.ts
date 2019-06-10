@@ -3,6 +3,7 @@ import Chess from '../../node_modules/chess.js';
 import { RandomPlayer } from './players/randomPlayer.js';
 import { FirstMovePlayer } from './players/firstMovePlayer.js';
 import { IPlayer } from './players/IPlayer';
+import { stringify } from '@angular/compiler/src/util';
 
 
 const WHITE: string = 'w',
@@ -62,13 +63,13 @@ export class AppComponent {
     stockfish.onmessage = function onmessage(event) {
       const message: string = event.data;
 
-      if (message.startsWith('info depth 5')) {
+      if (message.startsWith('info depth 15')) {
         const resultSpans = Array.from(document.getElementsByClassName('result'));
 
         for (let result of resultSpans) {
           if (result.innerHTML == '')
           {
-            result.innerHTML = message.split(' ')[9];
+            result.innerHTML = stringify(parseInt(message.split(' ')[9])/100);
             break;
           }
         }
@@ -77,7 +78,7 @@ export class AppComponent {
 
     stockfish.postMessage('ucinewgame');
     stockfish.postMessage(`position fen ${this.fen}`);
-    stockfish.postMessage('go depth 5');
+    stockfish.postMessage('go depth 15');
     
   }
 }
