@@ -24,8 +24,8 @@ export class AppComponent implements OnInit {
   stockfish: any;
   turn: any;
 
-  playerWhite: any;
-  playerBlack: any;
+  playerWhite: IPlayer;
+  playerBlack: IPlayer;
 
   ngOnInit(): void {
     this.stockfish = new Worker('stockfish.js');
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
       const message: string = event.data;
 
       if (message.startsWith('info depth 15')) {
-        const resultSpans = Array.from(document.getElementsByClassName('result'));
+        const resultSpans = this.getResultSpans();
 
         for (const result of resultSpans) {
           if (result.innerHTML === '') {
@@ -61,8 +61,8 @@ export class AppComponent implements OnInit {
   }
 
   startGame(): void {
-    this.playerWhite = new RandomPlayer();
-    this.playerBlack = new FirstMovePlayer();
+    this.playerWhite = new RandomPlayer('Random Player');
+    this.playerBlack = new FirstMovePlayer('First Move Player');
 
     this.chessGame = new Chess();
 
