@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Chess from '../../node_modules/chess.js';
 import { RandomPlayer } from './players/randomPlayer.js';
 import { FirstMovePlayer } from './players/firstMovePlayer.js';
@@ -6,24 +6,55 @@ import { IPlayer } from './players/IPlayer';
 import { stringify } from '@angular/compiler/src/util';
 
 
-const WHITE: string = 'w',
-    BLACK: string = 'b';
+const WHITE = 'w';
+const BLACK = 'b';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   chessGame: any;
   fen: any;
   gameResult: string;
+  gameResults: number[] = [];
   moves: any;
   legalMoves: any;
+  stockfish: any;
   turn: any;
 
   playerWhite: any;
   playerBlack: any;
+
+  ngOnInit(): void {
+    this.stockfish = new Worker('stockfish.js');
+
+    this.stockfish.onmessage = function onmessage(event) {
+      const message: string = event.data;
+
+      if (message.startsWith('info depth 15')) {
+        const resultSpans = Array.from(document.getElementsByClassName('result'));
+
+        for (const result of resultSpans) {
+          if (result.innerHTML === '') {
+            result.innerHTML = stringify(parseInt(message.split(' ')[9], 10) / 100);
+            break;
+          }
+        }
+      }
+    };
+  }
+
+  compileResults(): void {
+    const resultSpans = this.getResultSpans();
+
+    for (const result of resultSpans) {
+      if (result.innerHTML !== '') {
+        this.gameResults.push(parseFloat(result.innerHTML));
+      }
+    }
+  }
 
   generateArray(n: number) {
     return Array(n);
@@ -45,40 +76,25 @@ export class AppComponent {
       let move;
 
       if (this.turn === WHITE) {
-        move = this.playerWhite.chooseMove(moves)
+        move = this.playerWhite.chooseMove(moves);
       } else {
         move = this.playerBlack.chooseMove(moves);
       }
-      
+
       this.moves += ' ' + move;
       this.chessGame.move(move);
       moveCount++;
-      if(moveCount === 30) {
+      if (moveCount === 30) {
         this.fen = this.chessGame.fen();
       }
     }
 
-    var stockfish = new Worker('stockfish.js');
-    
-    stockfish.onmessage = function onmessage(event) {
-      const message: string = event.data;
+    this.stockfish.postMessage('ucinewgame');
+    this.stockfish.postMessage(`position fen ${this.fen}`);
+    this.stockfish.postMessage('go depth 15');
+  }
 
-      if (message.startsWith('info depth 15')) {
-        const resultSpans = Array.from(document.getElementsByClassName('result'));
-
-        for (let result of resultSpans) {
-          if (result.innerHTML == '')
-          {
-            result.innerHTML = stringify(parseInt(message.split(' ')[9])/100);
-            break;
-          }
-        }
-      }
-    };
-
-    stockfish.postMessage('ucinewgame');
-    stockfish.postMessage(`position fen ${this.fen}`);
-    stockfish.postMessage('go depth 15');
-    
+  private getResultSpans(): Element[] {
+    return Array.from(document.getElementsByClassName('result'));
   }
 }
