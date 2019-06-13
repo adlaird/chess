@@ -17,6 +17,7 @@ const BLACK = 'b';
 export class AppComponent implements OnInit {
   chessGame: any;
   fen: any;
+  gameCount = 0;
   gameResult: string;
   gameResults: number[] = [];
   moves: any;
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
       const message: string = event.data;
 
       if (message.startsWith('info depth 15')) {
-        const resultSpans = this.getResultSpans();
+        const resultSpans = Array.from(document.getElementsByClassName('result'));
 
         for (const result of resultSpans) {
           if (result.innerHTML === '') {
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
     for (const result of resultSpans) {
       if (result.innerHTML !== '') {
         this.gameResults.push(parseFloat(result.innerHTML));
+        this.gameCount++;
       }
     }
   }
@@ -61,37 +63,39 @@ export class AppComponent implements OnInit {
   }
 
   startGame(): void {
-    this.playerWhite = new RandomPlayer('Random Player');
-    this.playerBlack = new FirstMovePlayer('First Move Player');
+    for (let x = 0; x < 10; x++) {
+      this.playerWhite = new RandomPlayer('Random Player');
+      this.playerBlack = new FirstMovePlayer('First Move Player');
 
-    this.chessGame = new Chess();
+      this.chessGame = new Chess();
 
-    this.legalMoves = this.chessGame.moves();
-    this.turn = this.chessGame.turn();
+      this.legalMoves = this.chessGame.moves();
+      this.turn = this.chessGame.turn();
 
-    let moveCount = 0;
+      let moveCount = 0;
 
-    while (!this.chessGame.game_over() && moveCount < 100) {
-      const moves = this.chessGame.moves();
-      let move;
+      while (!this.chessGame.game_over() && moveCount < 100) {
+        const moves = this.chessGame.moves();
+        let move;
 
-      if (this.turn === WHITE) {
-        move = this.playerWhite.chooseMove(moves);
-      } else {
-        move = this.playerBlack.chooseMove(moves);
+        if (this.turn === WHITE) {
+          move = this.playerWhite.chooseMove(moves);
+        } else {
+          move = this.playerBlack.chooseMove(moves);
+        }
+
+        this.moves += ' ' + move;
+        this.chessGame.move(move);
+        moveCount++;
+        if (moveCount === 30) {
+          this.fen = this.chessGame.fen();
+        }
       }
 
-      this.moves += ' ' + move;
-      this.chessGame.move(move);
-      moveCount++;
-      if (moveCount === 30) {
-        this.fen = this.chessGame.fen();
-      }
+      this.stockfish.postMessage('ucinewgame');
+      this.stockfish.postMessage(`position fen ${this.fen}`);
+      this.stockfish.postMessage('go depth 15');
     }
-
-    this.stockfish.postMessage('ucinewgame');
-    this.stockfish.postMessage(`position fen ${this.fen}`);
-    this.stockfish.postMessage('go depth 15');
   }
 
   private getResultSpans(): Element[] {

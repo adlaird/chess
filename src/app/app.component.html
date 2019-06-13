@@ -19,9 +19,14 @@
 </div>
 
 <div class="row" *ngIf="gameResults">
-  <span *ngFor="let result of gameResults" class="badge" [ngClass]="{'badge-light': result > 0, 'badge-dark': result < 0}">
-    {{ result }}
-  </span>
+  <div class="col-md-2">
+    {{ gameCount }}
+  </div>
+  <div class="col-md-10">
+    <span *ngFor="let result of gameResults" class="badge" [ngClass]="{'badge-light': result > 0, 'badge-dark': result < 0}">
+      {{ result }}
+    </span>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
