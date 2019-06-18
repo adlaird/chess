@@ -3,8 +3,8 @@ import { IPlayer } from './IPlayer';
 export class RandomPlayer implements IPlayer {
     name: string;
 
-    constructor(name: string) {
-        this.name = name;
+    constructor() {
+        this.name = 'Random Player';
     }
 
     public chooseMove(moves: string[]) {

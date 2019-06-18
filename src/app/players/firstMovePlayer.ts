@@ -3,8 +3,8 @@ import { IPlayer } from './IPlayer';
 export class FirstMovePlayer implements IPlayer {
     name: string;
 
-    constructor(name: string) {
-        this.name = name;
+    constructor() {
+        this.name = 'First Move Player';
     }
 
     public chooseMove(moves: string[]) {
