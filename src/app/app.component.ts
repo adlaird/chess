@@ -47,7 +47,20 @@ export class AppComponent implements OnInit {
 
         for (const result of resultSpans) {
           if (result.innerHTML === '') {
-            result.innerHTML = stringify(parseInt(message.split(' ')[9], 10) / 100);
+            debugger;
+            const parts = message.split(' ');
+
+            if (parts[8] === 'mate') {
+              const mateIn = parseInt(parts[9], 10);
+              if (mateIn > 0) {
+                result.innerHTML = `W in ${mateIn}`;
+              } else {
+                result.innerHTML = `B in ${mateIn}`;
+              }
+            } else {
+              result.innerHTML = stringify(parseInt(parts[9], 10) / 100);
+            }
+            
             break;
           }
         }
@@ -62,6 +75,7 @@ export class AppComponent implements OnInit {
     this.gameCount = 0;
     this.whiteWins = 0;
     this.blackWins = 0;
+    this.draws = 0;
 
     for (const result of resultSpans) {
       if (result.innerHTML !== '') {
@@ -72,8 +86,6 @@ export class AppComponent implements OnInit {
         } else if (result.innerHTML === 'STALEMATE') {
           this.draws++;
         } else {
-          this.gameResults.push(parseFloat(result.innerHTML));
-          
           if (parseFloat(result.innerHTML) > 0) {
             this.whiteWins++;
           } else {
@@ -91,6 +103,7 @@ export class AppComponent implements OnInit {
   }
 
   startGame(): void {
+    this.gameCount++;
     this.playerWhite = new RandomPlayer();
     this.playerBlack = new CheckmateOrTakePlayer();
 
@@ -111,6 +124,9 @@ export class AppComponent implements OnInit {
       this.chessGame.move(move);
       moveCount++;
     }
+
+    let fen = this.chessGame.fen();
+    this.fens.push(fen);
 
     if (this.chessGame.in_checkmate()) {
       const resultSpans = this.getResultSpans();
@@ -139,15 +155,11 @@ export class AppComponent implements OnInit {
           break;
         }
       }
+    } else {
+      this.stockfish.postMessage('ucinewgame');
+      this.stockfish.postMessage(`position fen ${fen}`);
+      this.stockfish.postMessage('go depth 20');
     }
-
-    let fen = this.chessGame.fen();
-
-    this.stockfish.postMessage('ucinewgame');
-    this.stockfish.postMessage(`position fen ${fen}`);
-    this.stockfish.postMessage('go depth 20');
-
-    this.fens.push(fen);
   }
 
   private getResultSpans(): Element[] {
