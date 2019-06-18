@@ -4,12 +4,6 @@
   </div>
 </div>
 
-<h1 *ngIf="legalMoves">Legal Moves</h1>
-<pre>{{ legalMoves }}</pre>
-<pre>Turn: {{ turn }}</pre>
-
-<div> {{ moves }} </div>
-<div> fen: {{ fen }} </div>
 <span *ngFor="let item of generateArray(100); let i = index;" class="result"> </span>
 
 <div class="row">
@@ -20,12 +14,27 @@
 
 <div class="row" *ngIf="gameResults">
   <div class="col-md-2">
-    {{ gameCount }}
+    Games Played: {{ gameCount }}
   </div>
   <div class="col-md-10">
     <span *ngFor="let result of gameResults" class="badge" [ngClass]="{'badge-light': result > 0, 'badge-dark': result < 0}">
       {{ result }}
     </span>
+  </div>
+</div>
+
+<div class="row" *ngIf="gameCount">
+  <div class="col-md-2">
+    {{ playerWhite?.name }}: {{ whiteWins }}-{{ blackWins }}-{{ draws }}
+  </div>
+  <div class="col-md-2">
+    {{ playerBlack?.name }}: {{ blackWins }}-{{ whiteWins }}-{{ draws }}
+  </div>
+</div>
+
+<div class="row" *ngFor="let fen of fens">
+  <div class="col-md-12">
+    {{ fen }}
   </div>
 </div>
 

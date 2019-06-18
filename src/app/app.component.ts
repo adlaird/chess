@@ -4,6 +4,9 @@ import { RandomPlayer } from './players/randomPlayer.js';
 import { FirstMovePlayer } from './players/firstMovePlayer.js';
 import { IPlayer } from './players/IPlayer';
 import { stringify } from '@angular/compiler/src/util';
+import { AlwaysTakePlayer } from './players/alwaysTakePlayer.js';
+import { PawnCapturePlayer } from './players/pawnCapturePlayer.js';
+import { CheckmatePlayer } from './players/checkmatePlayer.js';
 
 
 const WHITE = 'w';
@@ -15,8 +18,11 @@ const BLACK = 'b';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  blackWins = 0;
   chessGame: any;
-  fen: any;
+  draws = 0;
+  fen: string;
+  fens: string[] = [];
   gameCount = 0;
   gameResult: string;
   gameResults: number[] = [];
@@ -24,6 +30,7 @@ export class AppComponent implements OnInit {
   legalMoves: any;
   stockfish: any;
   turn: any;
+  whiteWins = 0;
 
   playerWhite: IPlayer;
   playerBlack: IPlayer;
@@ -50,9 +57,29 @@ export class AppComponent implements OnInit {
   compileResults(): void {
     const resultSpans = this.getResultSpans();
 
+    this.gameResults = [];
+    this.gameCount = 0;
+    this.whiteWins = 0;
+    this.blackWins = 0;
+
     for (const result of resultSpans) {
       if (result.innerHTML !== '') {
-        this.gameResults.push(parseFloat(result.innerHTML));
+        if (result.innerHTML === 'BLACK') {
+          this.blackWins++;
+        } else if (result.innerHTML === 'WHITE') {
+          this.whiteWins++;
+        } else if (result.innerHTML === 'STALEMATE') {
+          this.draws++;
+        } else {
+          this.gameResults.push(parseFloat(result.innerHTML));
+          
+          if (parseFloat(result.innerHTML) > 0) {
+            this.whiteWins++;
+          } else {
+            this.blackWins++;
+          }
+        }
+
         this.gameCount++;
       }
     }
@@ -63,39 +90,63 @@ export class AppComponent implements OnInit {
   }
 
   startGame(): void {
-    for (let x = 0; x < 10; x++) {
-      this.playerWhite = new RandomPlayer('Random Player');
-      this.playerBlack = new FirstMovePlayer('First Move Player');
+    this.playerWhite = new RandomPlayer();
+    this.playerBlack = new CheckmatePlayer();
 
-      this.chessGame = new Chess();
+    this.chessGame = new Chess();
 
-      this.legalMoves = this.chessGame.moves();
-      this.turn = this.chessGame.turn();
+    let moveCount = 0;
 
-      let moveCount = 0;
+    while (!this.chessGame.game_over() && moveCount < 300) {
+      const moves = this.chessGame.moves();
+      let move;
 
-      while (!this.chessGame.game_over() && moveCount < 100) {
-        const moves = this.chessGame.moves();
-        let move;
+      if (this.chessGame.turn() === WHITE) {
+        move = this.playerWhite.chooseMove(moves);
+      } else {
+        move = this.playerBlack.chooseMove(moves);
+      }
 
-        if (this.turn === WHITE) {
-          move = this.playerWhite.chooseMove(moves);
-        } else {
-          move = this.playerBlack.chooseMove(moves);
-        }
+      this.chessGame.move(move);
+      moveCount++;
+    }
 
-        this.moves += ' ' + move;
-        this.chessGame.move(move);
-        moveCount++;
-        if (moveCount === 30) {
-          this.fen = this.chessGame.fen();
+    if (this.chessGame.in_checkmate()) {
+      const resultSpans = this.getResultSpans();
+      let emptySpan = null;
+
+      for (const span of resultSpans) {
+        if (span.innerHTML === '') {
+          emptySpan = span;
+          break;
         }
       }
 
-      this.stockfish.postMessage('ucinewgame');
-      this.stockfish.postMessage(`position fen ${this.fen}`);
-      this.stockfish.postMessage('go depth 15');
+      if (this.chessGame.turn() === WHITE) {
+        this.blackWins++;
+        emptySpan.innerHTML = 'BLACK';
+      } else {
+        this.whiteWins++;
+        emptySpan.innerHTML = 'WHITE';
+      }
+    } else if (this.chessGame.in_stalemate()) {
+      const resultSpans = this.getResultSpans();
+
+      for (const span of resultSpans) {
+        if (span.innerHTML === '') {
+          span.innerHTML = 'STALEMATE';
+          break;
+        }
+      }
     }
+
+    let fen = this.chessGame.fen();
+
+    this.stockfish.postMessage('ucinewgame');
+    this.stockfish.postMessage(`position fen ${fen}`);
+    this.stockfish.postMessage('go depth 20');
+
+    this.fens.push(fen);
   }
 
   private getResultSpans(): Element[] {
