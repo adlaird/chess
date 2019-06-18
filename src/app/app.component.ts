@@ -7,6 +7,7 @@ import { stringify } from '@angular/compiler/src/util';
 import { AlwaysTakePlayer } from './players/alwaysTakePlayer.js';
 import { PawnCapturePlayer } from './players/pawnCapturePlayer.js';
 import { CheckmatePlayer } from './players/checkmatePlayer.js';
+import { CheckmateOrTakePlayer } from './players/checkmateOrTakePlayer.js';
 
 
 const WHITE = 'w';
@@ -91,7 +92,7 @@ export class AppComponent implements OnInit {
 
   startGame(): void {
     this.playerWhite = new RandomPlayer();
-    this.playerBlack = new CheckmatePlayer();
+    this.playerBlack = new CheckmateOrTakePlayer();
 
     this.chessGame = new Chess();
 
