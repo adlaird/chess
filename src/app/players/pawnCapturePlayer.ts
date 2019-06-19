@@ -1,4 +1,5 @@
 import { IPlayer } from './IPlayer';
+import Chess from '../../../node_modules/chess.js';
 
 export class PawnCapturePlayer implements IPlayer {
     name: string;
@@ -7,7 +8,8 @@ export class PawnCapturePlayer implements IPlayer {
         this.name = 'Pawn Capture Player';
     }
 
-    public chooseMove(moves: string[]) {
+    public chooseMove(fen: string) {
+        const moves = new Chess(fen).moves();
         let chosenMove = null;
         moves.forEach((move) => {
             if (move.indexOf('x') === 1) {

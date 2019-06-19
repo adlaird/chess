@@ -104,13 +104,12 @@ export class AppComponent implements OnInit {
     let moveCount = 0;
 
     while (!this.chessGame.game_over() && moveCount < 200) {
-      const moves = this.chessGame.moves();
       let move;
 
       if (this.chessGame.turn() === WHITE) {
-        move = this.playerWhite.chooseMove(moves);
+        move = this.playerWhite.chooseMove(this.chessGame.fen());
       } else {
-        move = this.playerBlack.chooseMove(moves);
+        move = this.playerBlack.chooseMove(this.chessGame.fen());
       }
 
       this.chessGame.move(move);

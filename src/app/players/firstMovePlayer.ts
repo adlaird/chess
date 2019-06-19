@@ -1,4 +1,5 @@
 import { IPlayer } from './IPlayer';
+import Chess from '../../../node_modules/chess.js';
 
 export class FirstMovePlayer implements IPlayer {
     name: string;
@@ -7,7 +8,8 @@ export class FirstMovePlayer implements IPlayer {
         this.name = 'First Move Player';
     }
 
-    public chooseMove(moves: string[]) {
+    public chooseMove(fen: string) {
+        const moves = new Chess(fen).moves();
         return moves[0];
     }
 }

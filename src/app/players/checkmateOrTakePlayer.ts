@@ -1,4 +1,5 @@
 import { IPlayer } from './IPlayer';
+import Chess from '../../../node_modules/chess.js';
 
 export class CheckmateOrTakePlayer implements IPlayer {
     name: string;
@@ -7,8 +8,10 @@ export class CheckmateOrTakePlayer implements IPlayer {
         this.name = 'Checkmate Or Take Player';
     }
 
-    public chooseMove(moves: string[]) {
+    public chooseMove(fen: string) {
+        const moves = new Chess(fen).moves();
         let chosenMove = null;
+
         moves.forEach((move) => {
             if (move.indexOf('#') !== -1) {
                 chosenMove = move;

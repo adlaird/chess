@@ -1,4 +1,4 @@
 export interface IPlayer {
-    chooseMove: (moves: string[]) => string;
+    chooseMove: (fen: string) => string;
     name: string;
 }
