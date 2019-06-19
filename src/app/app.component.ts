@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import Chess from '../../node_modules/chess.js';
 import { RandomPlayer } from './players/randomPlayer.js';
-import { FirstMovePlayer } from './players/firstMovePlayer.js';
 import { IPlayer } from './players/IPlayer';
 import { stringify } from '@angular/compiler/src/util';
-import { AlwaysTakePlayer } from './players/alwaysTakePlayer.js';
-import { PawnCapturePlayer } from './players/pawnCapturePlayer.js';
-import { CheckmatePlayer } from './players/checkmatePlayer.js';
 import { CheckmateOrTakePlayer } from './players/checkmateOrTakePlayer.js';
 
-
 const WHITE = 'w';
-const BLACK = 'b';
 
 @Component({
   selector: 'app-root',
@@ -59,7 +53,6 @@ export class AppComponent implements OnInit {
             } else {
               result.innerHTML = stringify(parseInt(parts[9], 10) / 100);
             }
-
             break;
           }
         }
@@ -110,7 +103,7 @@ export class AppComponent implements OnInit {
 
     let moveCount = 0;
 
-    while (!this.chessGame.game_over() && moveCount < 300) {
+    while (!this.chessGame.game_over() && moveCount < 200) {
       const moves = this.chessGame.moves();
       let move;
 
@@ -157,7 +150,7 @@ export class AppComponent implements OnInit {
     } else {
       this.stockfish.postMessage('ucinewgame');
       this.stockfish.postMessage(`position fen ${fen}`);
-      this.stockfish.postMessage('go depth 20');
+      this.stockfish.postMessage('go depth 15');
     }
   }
 
