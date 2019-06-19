@@ -146,6 +146,8 @@ export class AppComponent implements OnInit {
           break;
         }
       }
+
+      this.draws++;
     } else {
       this.stockfish.postMessage('ucinewgame');
       this.stockfish.postMessage(`position fen ${fen}`);
