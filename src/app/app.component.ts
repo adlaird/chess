@@ -47,7 +47,6 @@ export class AppComponent implements OnInit {
 
         for (const result of resultSpans) {
           if (result.innerHTML === '') {
-            debugger;
             const parts = message.split(' ');
 
             if (parts[8] === 'mate') {
@@ -60,7 +59,7 @@ export class AppComponent implements OnInit {
             } else {
               result.innerHTML = stringify(parseInt(parts[9], 10) / 100);
             }
-            
+
             break;
           }
         }
@@ -125,7 +124,7 @@ export class AppComponent implements OnInit {
       moveCount++;
     }
 
-    let fen = this.chessGame.fen();
+    const fen = this.chessGame.fen();
     this.fens.push(fen);
 
     if (this.chessGame.in_checkmate()) {
