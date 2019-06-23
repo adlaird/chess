@@ -1,5 +1,6 @@
 import { IPlayer } from './IPlayer';
 import Chess from '../../../node_modules/chess.js';
+import { IChessJs } from '../IChessJs';
 
 export class CaptureEvaluationPlayer implements IPlayer {
     name: string;
@@ -9,7 +10,7 @@ export class CaptureEvaluationPlayer implements IPlayer {
     }
 
     public chooseMove(fen: string) {
-        const game = new Chess(fen);
+        const game = new Chess(fen) as IChessJs;
         const moves = game.moves();
 
         const checkmateMove = this.getCheckmateMove(moves);
@@ -21,13 +22,13 @@ export class CaptureEvaluationPlayer implements IPlayer {
         const captures = this.getCaptures(moves);
 
         if (captures.length) {
-            return this.getBestCapture(moves);
+            return this.getBestCapture(game);
         }
 
         return moves[Math.floor(Math.random() * moves.length)];
     }
 
-    private getBestCapture(game): string {
+    private getBestCapture(game: IChessJs): string {
         const captures: string[] = [];
 
         game.moves().forEach((move) => {
@@ -36,17 +37,18 @@ export class CaptureEvaluationPlayer implements IPlayer {
             }
         });
 
+        let captureEvalList = [];
+
         captures.forEach((capture) => {
-            // get capturing piece
             const capturingPiece = this.getCapturingPiece(capture);
-            // get captured piece
-            // get value difference between
-            // add to array
+            const capturedPiece = this.getCapturedPiece(capture, game);
+            const pieceDifference = this.getPieceValue(capturingPiece) - this.getPieceValue(capturedPiece);
+            captureEvalList.push({ capture, pieceDifference });
         });
 
-        // sort array by value difference. grab the best
+        captureEvalList = captureEvalList.sort((captureEval: any) => captureEval.pieceDifference);
 
-        return captures[0];
+        return captureEvalList[0].capture;
     }
 
     private getCaptures(moves: string[]): string[] {
@@ -59,6 +61,24 @@ export class CaptureEvaluationPlayer implements IPlayer {
         });
 
         return captures;
+    }
+
+    private getCapturedPiece(capture: string, game: IChessJs): string {
+        const splitCapture = capture.split('x');
+
+        if (splitCapture.length !== 2) {
+            return null;
+        }
+
+        const square = splitCapture[1].substr(0, 2);
+        const piece = game.get(square);
+        
+        if (piece) {
+            return piece.type;
+        } else {
+            // en-passant
+            return 'p';
+        }
     }
 
     private getCapturingPiece(capture: string): string {
@@ -87,5 +107,21 @@ export class CaptureEvaluationPlayer implements IPlayer {
         });
 
         return checkmateMove;
+    }
+
+    private getPieceValue(piece): number {
+        if (piece === 'q') {
+            return 9;
+        } else if (piece === 'k') {
+            return 2;
+        } else if (piece === 'b') {
+            return 3.01;
+        } else if (piece === 'n') {
+            return 3;
+        } else if (piece === 'r') {
+            return 5;
+        } else {
+            return 1;
+        }
     }
 }

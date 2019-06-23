@@ -4,6 +4,8 @@ import { RandomPlayer } from './players/randomPlayer.js';
 import { IPlayer } from './players/IPlayer';
 import { stringify } from '@angular/compiler/src/util';
 import { CheckmateOrTakePlayer } from './players/checkmateOrTakePlayer.js';
+import { IChessJs } from './IChessJs.js';
+import { CaptureEvaluationPlayer } from './players/captureEvaluationPlayer.js';
 
 const WHITE = 'w';
 
@@ -97,9 +99,9 @@ export class AppComponent implements OnInit {
   startGame(): void {
     this.gameCount++;
     this.playerWhite = new RandomPlayer();
-    this.playerBlack = new CheckmateOrTakePlayer();
+    this.playerBlack = new CaptureEvaluationPlayer();
 
-    this.chessGame = new Chess();
+    this.chessGame = new Chess() as IChessJs;
 
     let moveCount = 0;
 
