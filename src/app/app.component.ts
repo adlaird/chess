@@ -75,9 +75,9 @@ export class AppComponent implements OnInit {
 
     for (const result of resultSpans) {
       if (result.innerHTML !== '') {
-        if (result.innerHTML === 'BLACK') {
+        if (result.innerHTML === 'BLACK' || result.innerHTML.startsWith('B in')) {
           this.blackWins++;
-        } else if (result.innerHTML === 'WHITE') {
+        } else if (result.innerHTML === 'WHITE' || result.innerHTML.startsWith('W in')) {
           this.whiteWins++;
         } else if (result.innerHTML === 'STALEMATE') {
           this.draws++;
@@ -100,7 +100,7 @@ export class AppComponent implements OnInit {
 
   startGame(): void {
     this.gameCount++;
-    this.playerWhite = new RandomPlayer();
+    this.playerWhite = new CheckmateOrTakePlayer();
     this.playerBlack = new CaptureEvaluationPlayer();
 
     this.chessGame = new Chess() as IChessJs;
