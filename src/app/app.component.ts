@@ -6,6 +6,8 @@ import { stringify } from '@angular/compiler/src/util';
 import { CheckmateOrTakePlayer } from './players/checkmateOrTakePlayer.js';
 import { IChessJs } from './IChessJs.js';
 import { CaptureEvaluationPlayer } from './players/captureEvaluationPlayer.js';
+import { PawnCapturePlayer } from './players/pawnCapturePlayer.js';
+import { AlwaysTakePlayer } from './players/alwaysTakePlayer.js';
 
 const WHITE = 'w';
 
