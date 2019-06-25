@@ -22,7 +22,7 @@ export class CaptureEvaluationPlayer implements IPlayer {
         const captures = this.getCaptures(moves);
 
         if (captures.length) {
-            return this.getBestCapture(game);
+            return this.getBestCapture(game) || moves[Math.floor(Math.random() * moves.length)];
         }
 
         return moves[Math.floor(Math.random() * moves.length)];
@@ -46,9 +46,13 @@ export class CaptureEvaluationPlayer implements IPlayer {
             captureEvalList.push({ capture, pieceDifference });
         });
 
-        captureEvalList = captureEvalList.sort((captureEval: any) => captureEval.pieceDifference);
+        captureEvalList = captureEvalList.sort((a: any, b: any) => a.pieceDifference - b.pieceDifference);
 
-        return captureEvalList[0].capture;
+        if (captureEvalList[0].pieceDifference <= 0) {
+            return captureEvalList[0].capture;
+        } else {
+            return null;
+        }
     }
 
     private getCaptures(moves: string[]): string[] {
