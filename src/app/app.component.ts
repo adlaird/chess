@@ -8,6 +8,7 @@ import { IChessJs } from './IChessJs.js';
 import { CaptureEvaluationPlayer } from './players/captureEvaluationPlayer.js';
 import { PawnCapturePlayer } from './players/pawnCapturePlayer.js';
 import { AlwaysTakePlayer } from './players/alwaysTakePlayer.js';
+import { CompetitionPlayer } from './players/competitionPlayer.js';
 
 const WHITE = 'w';
 
@@ -18,7 +19,7 @@ const WHITE = 'w';
 })
 export class AppComponent implements OnInit {
   blackWins = 0;
-  chessGame: any;
+  chessGame: IChessJs;
   draws = 0;
   fen: string;
   fens: string[] = [];
@@ -102,7 +103,7 @@ export class AppComponent implements OnInit {
   startGame(): void {
     this.gameCount++;
     this.playerWhite = new CheckmateOrTakePlayer();
-    this.playerBlack = new CaptureEvaluationPlayer();
+    this.playerBlack = new CompetitionPlayer();
 
     this.chessGame = new Chess() as IChessJs;
 
