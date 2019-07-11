@@ -1,8 +1,10 @@
 import { IPlayer } from './IPlayer';
 import Chess from '../../../node_modules/chess.js';
 import { IChessJs } from '../IChessJs';
+import _ from 'lodash';
 
 export class CompetitionPlayer implements IPlayer {
+    MAX_DEPTH = 3;
     name: string;
 
     constructor() {
@@ -18,10 +20,17 @@ export class CompetitionPlayer implements IPlayer {
         });
 
         if (checkmateMove) {
+            console.log(checkmateMove);
             return checkmateMove;
         }
 
-        return this.getBestMove(game) || this.getRandomMove(moves);
+        const selectedMove = this.getBestMove(game) || this.getRandomMove(moves);
+        console.log(selectedMove);
+
+        const currentdate = new Date();
+        console.log(currentdate.getHours() + ':' + currentdate.getMinutes() + ':' + currentdate.getSeconds());
+
+        return selectedMove;
     }
 
     private getBestMove(game: IChessJs): string {
@@ -33,9 +42,46 @@ export class CompetitionPlayer implements IPlayer {
 
         return this.getBestMoveWithDepth(game);
     }
-    
+
     private getBestMoveWithDepth(game: IChessJs): string {
         const moves = game.moves();
+
+        let evaluatedMoves = moves.map((move) => {
+            return {
+                move,
+                pieceDiff: this.evaluateMoveWithDepth(move, game, 1)
+            };
+        });
+
+        evaluatedMoves = evaluatedMoves.sort((a, b) => b.pieceDiff - a.pieceDiff);
+
+        return evaluatedMoves[0].move;
+    }
+
+    private evaluateMoveWithDepth(move: string, game: IChessJs, depth: number): number {
+        let pieceDiff = 0;
+
+        if (move.indexOf('#') !== -1) {
+            pieceDiff = 1000;
+        } else if (move.indexOf('x') !== -1) {
+            pieceDiff = this.getPieceValue(this.getCapturedPiece(move, game));
+        }
+
+        const clonedGame = new Chess(game.fen()) as IChessJs;
+        clonedGame.move(move);
+
+        if (depth === this.MAX_DEPTH || pieceDiff === 1000) {
+            return pieceDiff;
+        } else {
+            const nextMoves = clonedGame.moves();
+            const evaluatedMoves = nextMoves.map((nextMove) => {
+                return this.evaluateMoveWithDepth(nextMove, clonedGame, depth + 1);
+            });
+
+            const opponentBestMoveDiff = evaluatedMoves.sort((a, b) => b - a)[0];
+
+            return pieceDiff - opponentBestMoveDiff;
+        }
     }
 
     private findKnownOpeningMove(game: IChessJs): string {
@@ -46,6 +92,9 @@ export class CompetitionPlayer implements IPlayer {
         } else if (fen === 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1') {
             // e4
             return 'e5';
+        } else if (fen === 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
+            // new game
+            return 'e4';
         }
     }
 
