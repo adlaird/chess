@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
 
   playerWhite: IPlayer;
   playerBlack: IPlayer;
+  finalPGN: string;
 
   ngOnInit(): void {
     this.stockfish = new Worker('stockfish.js');
@@ -141,6 +142,8 @@ export class AppComponent implements OnInit {
         this.whiteWins++;
         emptySpan.innerHTML = 'WHITE';
       }
+
+      this.finalPGN = this.chessGame.pgn();
     } else if (this.chessGame.in_stalemate()) {
       const resultSpans = this.getResultSpans();
 
