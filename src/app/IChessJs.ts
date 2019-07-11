@@ -44,7 +44,7 @@ export interface IChessJs {
 
     turn: () => string;
 
-    move: () => any;
+    move: (move: string) => any;
 
     undo: () => any;
 
