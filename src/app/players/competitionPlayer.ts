@@ -55,7 +55,82 @@ export class CompetitionPlayer implements IPlayer {
 
         evaluatedMoves = evaluatedMoves.sort((a, b) => b.pieceDiff - a.pieceDiff);
 
-        return evaluatedMoves[0].move;
+        const topMove = evaluatedMoves[0];
+        const tiedTopMoves = evaluatedMoves.filter((evaluatedMove) => {
+            return evaluatedMove.pieceDiff === topMove.pieceDiff;
+        }).map((filteredMove) => filteredMove.move);
+
+        return this.chooseFromTopMoves(tiedTopMoves, game);
+    }
+    
+    private chooseFromTopMoves(moves: string[], game: IChessJs): string {
+        if (moves.length === 1) {
+            return moves[0];
+        } else if (this.hasPawnCenterControlMove(moves, game.turn())) {
+            return this.hasPawnCenterControlMove(moves, game.turn());
+        } else if (this.hasStrongKnightMove(moves, game.turn())) {
+            return this.hasStrongKnightMove(moves, game.turn());
+        }
+        //has center bishop control
+        //has castle
+
+        moves = this.removeWeakMoves(moves, game.turn());
+
+        return this.getRandomMove(moves);
+    }
+
+    private removeWeakMoves(moves: string[], turn: string): string[] {
+        if (moves.length === 1) {
+            return moves;
+        } else {
+            moves = this.removeKnightEdgeMoves(moves);
+        }
+        //remove king moves
+        //remove outside pawn moves
+
+        return moves;
+    }
+    
+    private removeKnightEdgeMoves(moves: string[]): string[] {
+        const newMoves = moves.filter((move) => {
+            return !(move.startsWith('Na') ||
+                move.startsWith('Nh') ||
+                (move.startsWith('N') && (move.endsWith('1') || move.endsWith('8'))));
+        });
+
+        return newMoves && newMoves.length ? newMoves : moves;
+    }
+    
+    private hasStrongKnightMove(moves: string[], turn: string) {
+        if (turn === 'w') {
+            if (moves.indexOf('Nf3') !== -1) {
+                return 'Nf3';
+            } else if (moves.indexOf('Nc3') !== -1) {
+                return 'Nc3';
+            }
+        } else {
+            if (moves.indexOf('Nc6') !== -1) {
+                return 'Nc6';
+            } else if (moves.indexOf('Nf6') !== -1) {
+                return 'Nf6';
+            }
+        }
+    }
+    
+    private hasPawnCenterControlMove(moves: string[], turn: string): string {
+        if (turn === 'w') {
+            if (moves.indexOf('e4') !== -1) {
+                return 'e4';
+            } else if (moves.indexOf('d4') !== -1) {
+                return 'd4';
+            }
+        } else {
+            if (moves.indexOf('e5') !== -1) {
+                return 'e5';
+            } else if (moves.indexOf('d5') !== -1) {
+                return 'd5';
+            }
+        }
     }
 
     private evaluateMoveWithDepth(move: string, game: IChessJs, depth: number): number {
