@@ -4,7 +4,7 @@ import { IChessJs } from '../IChessJs';
 import _ from 'lodash';
 
 export class CompetitionPlayer implements IPlayer {
-    MAX_DEPTH = 3;
+    MAX_DEPTH = 2;
     name: string;
 
     constructor() {
@@ -86,11 +86,13 @@ export class CompetitionPlayer implements IPlayer {
 
     private findKnownOpeningMove(game: IChessJs): string {
         const fen = game.fen();
-        if (game.fen() === 'rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1') {
+        if (fen === 'rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1') {
             // f4
             return 'd5';
-        } else if (fen === 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1') {
+        } else if (fen === 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1' ||
+                   fen === 'rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1') {
             // e4
+            // e3
             return 'e5';
         } else if (fen === 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
             // new game
