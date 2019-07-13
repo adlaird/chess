@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
 
   startGame(): void {
     this.gameCount++;
-    this.playerWhite = new CheckmateOrTakePlayer();
+    this.playerWhite = new CompetitionPlayer();
     this.playerBlack = new CompetitionPlayer();
 
     this.chessGame = new Chess() as IChessJs;
