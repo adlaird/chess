@@ -32,7 +32,51 @@ export class EngineTesterComponent implements OnInit {
       {
         fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
         expectedMove: 'e4'
-      }
+      },
+      {
+        fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
+        expectedMove: 'e5'
+      },
+      {
+        fen: 'rnbqkbnr/ppppp1pp/8/5p2/4P3/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 2',
+        expectedMove: 'exf5'
+      },
+      {
+        fen: 'rnbqkbnr/ppp2ppp/8/3pP3/8/7P/PPP1PPP1/RNBQKBNR w KQkq - 0 4',
+        expectedMove: 'Qxd5'
+      },
+      {
+        fen: 'rn1qkbnr/ppp1pppp/3p4/5b2/7P/8/PPPPP1P1/RNBQKBNR b KQkq h3 0 3',
+        expectedMove: 'Bxc2'
+      },
+      {
+        fen: '1r2kb2/pp4pr/3p4/4p3/4n1B1/8/PP1P4/RNB1K1N1 b Q - 0 12',
+        expectedMove: 'Nxd2'
+      },
+      {
+        fen: '2r5/8/2p4k/1p6/P7/8/1R6/7K w - d6 0 2',
+        expectedMove: 'axb5'
+      },
+      {
+        fen: '4r2k/p3qR1p/1p5B/1PpQp1p1/2Pp4/3P3P/P7/6K1 w - - 0 43',
+        expectedMove: 'Bg7+'
+      },
+      {
+        fen: 'rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1',
+        expectedMove: 'd5'
+      },
+      {
+        fen: 'rn1qkbnr/ppQ2ppp/3p4/4p3/7P/8/PP1PP1P1/RNB1KBNR b KQkq - 0 5',
+        expectedMove: 'Qxc7'
+      },
+      {
+        fen: 'r3k3/pR4pr/8/4p3/6B1/P7/8/2B1KN2 b - - 0 20',
+        expectedMove: 'g6'
+      },
+      {
+        fen: '8/3k4/8/6pB/R7/P7/1B3K2/5N2 b - - 2 30',
+        expectedMove: 'g4'
+      },
     ];
 
     this.player = new CompetitionPlayer();
@@ -41,5 +85,4 @@ export class EngineTesterComponent implements OnInit {
   public testMove(index: number): void {
     this.tests[index].actualMove = this.player.chooseMove(this.tests[index].fen);
   }
-
 }

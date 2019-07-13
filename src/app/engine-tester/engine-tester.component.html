@@ -14,7 +14,8 @@
   </div>
   <div class="col-md-1"
       *ngIf="test.actualMove"
-      [style.backgroundColor]="test.expectedMove !== test.actualMove ? 'red' : 'green'">
+      [style.backgroundColor]="test.expectedMove !== test.actualMove ? 'red' : 'green'"
+      [style.color]="test.actualMove ? 'white' : 'black'">
     {{test.actualMove}}
   </div>
 </div>
