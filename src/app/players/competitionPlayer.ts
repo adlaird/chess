@@ -25,7 +25,6 @@ export class CompetitionPlayer implements IPlayer {
         }
 
         const selectedMove = this.getBestMove(game) || this.getRandomMove(moves);
-        debugger;
         console.log(selectedMove);
 
         const currentdate = new Date();
@@ -46,7 +45,6 @@ export class CompetitionPlayer implements IPlayer {
 
     private getBestMoveWithDepth(game: IChessJs): string {
         const moves = game.moves();
-        debugger;
 
         let evaluatedMoves = moves.map((move) => {
             return {
@@ -113,11 +111,30 @@ export class CompetitionPlayer implements IPlayer {
             return moves;
         } else {
             moves = this.removeKnightEdgeMoves(moves);
+            moves = this.removeKingMoves(moves);
+            moves = this.removeOutsidePawnMoves(moves);
         }
-        // remove king moves
-        // remove outside pawn moves
 
         return moves;
+    }
+
+    private removeOutsidePawnMoves(moves: string[]): string[] {
+        const newMoves = moves.filter((move) => {
+            return !(move.startsWith('a') ||
+                move.startsWith('b') ||
+                move.startsWith('c') ||
+                move.startsWith('f') ||
+                move.startsWith('g') ||
+                move.startsWith('h'));
+        });
+
+        return newMoves && newMoves.length ? newMoves : moves;
+    }
+    
+    private removeKingMoves(moves: string[]): string[] {
+        const newMoves = moves.filter((move) => !move.startsWith('K'));
+
+        return newMoves && newMoves.length ? newMoves : moves;
     }
 
     private removeKnightEdgeMoves(moves: string[]): string[] {
