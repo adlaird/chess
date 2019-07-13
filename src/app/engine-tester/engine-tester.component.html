@@ -1,0 +1,20 @@
+<div class="row" 
+    *ngFor="let test of tests; let i = index">
+  <div class="col-md-1">
+      <button class="btn btn-info"
+      (click)="testMove(i)">
+      Test
+    </button>
+  </div>
+  <div class="col-md-7">
+    {{test.fen}}
+  </div>
+  <div class="col-md-1">
+    {{test.expectedMove}}
+  </div>
+  <div class="col-md-1"
+      *ngIf="test.actualMove"
+      [style.backgroundColor]="test.expectedMove !== test.actualMove ? 'red' : 'green'">
+    {{test.actualMove}}
+  </div>
+</div>
