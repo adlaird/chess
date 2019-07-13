@@ -65,6 +65,7 @@ export class CompetitionPlayer implements IPlayer {
 
     private chooseFromTopMoves(moves: string[], game: IChessJs): string {
         const turn = game.turn();
+
         if (moves.length === 1) {
             return moves[0];
         } else if (this.hasPawnCenterControlMove(moves, turn)) {
@@ -186,6 +187,8 @@ export class CompetitionPlayer implements IPlayer {
             pieceDiff = 1000;
         } else if (move.indexOf('x') !== -1) {
             pieceDiff = this.getPieceValue(this.getCapturedPiece(move, game));
+        } else if (move.indexOf('=') !== -1) {
+            pieceDiff = 8;
         }
 
         const clonedGame = new Chess(game.fen()) as IChessJs;
