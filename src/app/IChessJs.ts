@@ -20,7 +20,7 @@ export interface IChessJs {
 
     in_checkmate: () => boolean;
 
-    in_stalemate: () => boolean
+    in_stalemate: () => boolean;
 
     in_draw: () => boolean;
 

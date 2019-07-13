@@ -4,7 +4,7 @@ import { IChessJs } from '../IChessJs';
 import _ from 'lodash';
 
 export class CompetitionPlayer implements IPlayer {
-    MAX_DEPTH = 2;
+    MAX_DEPTH = 3;
     name: string;
 
     constructor() {
@@ -25,6 +25,7 @@ export class CompetitionPlayer implements IPlayer {
         }
 
         const selectedMove = this.getBestMove(game) || this.getRandomMove(moves);
+        debugger;
         console.log(selectedMove);
 
         const currentdate = new Date();
@@ -45,6 +46,7 @@ export class CompetitionPlayer implements IPlayer {
 
     private getBestMoveWithDepth(game: IChessJs): string {
         const moves = game.moves();
+        debugger;
 
         let evaluatedMoves = moves.map((move) => {
             return {
@@ -62,21 +64,48 @@ export class CompetitionPlayer implements IPlayer {
 
         return this.chooseFromTopMoves(tiedTopMoves, game);
     }
-    
+
     private chooseFromTopMoves(moves: string[], game: IChessJs): string {
+        const turn = game.turn();
         if (moves.length === 1) {
             return moves[0];
-        } else if (this.hasPawnCenterControlMove(moves, game.turn())) {
-            return this.hasPawnCenterControlMove(moves, game.turn());
-        } else if (this.hasStrongKnightMove(moves, game.turn())) {
-            return this.hasStrongKnightMove(moves, game.turn());
+        } else if (this.hasPawnCenterControlMove(moves, turn)) {
+            return this.hasPawnCenterControlMove(moves, turn);
+        } else if (this.hasStrongKnightMove(moves, turn)) {
+            return this.hasStrongKnightMove(moves, turn);
+        } else if (this.hasBishopCentroControlMove(moves, turn)) {
+            return this.hasBishopCentroControlMove(moves, turn);
+        } else if (this.hasCastleMove(moves, turn)) {
+            return this.hasCastleMove(moves, turn);
         }
-        //has center bishop control
-        //has castle
 
         moves = this.removeWeakMoves(moves, game.turn());
 
         return this.getRandomMove(moves);
+    }
+
+    private hasCastleMove(moves: string[], turn: string) {
+        if (moves.indexOf('O-O') !== -1) {
+            return 'O-O';
+        } else if (moves.indexOf('O-O-O') !== -1) {
+            return 'O-O-O';
+        }
+    }
+
+    private hasBishopCentroControlMove(moves: string[], turn: string) {
+        if (turn === 'w') {
+            if (moves.indexOf('Bc4') !== -1) {
+                return 'Bc4';
+            } else if (moves.indexOf('Bf4') !== -1) {
+                return 'Bf4';
+            }
+        } else {
+            if (moves.indexOf('Bc5') !== -1) {
+                return 'Bc5';
+            } else if (moves.indexOf('Bf5') !== -1) {
+                return 'Bf5';
+            }
+        }
     }
 
     private removeWeakMoves(moves: string[], turn: string): string[] {
@@ -85,12 +114,12 @@ export class CompetitionPlayer implements IPlayer {
         } else {
             moves = this.removeKnightEdgeMoves(moves);
         }
-        //remove king moves
-        //remove outside pawn moves
+        // remove king moves
+        // remove outside pawn moves
 
         return moves;
     }
-    
+
     private removeKnightEdgeMoves(moves: string[]): string[] {
         const newMoves = moves.filter((move) => {
             return !(move.startsWith('Na') ||
@@ -100,7 +129,7 @@ export class CompetitionPlayer implements IPlayer {
 
         return newMoves && newMoves.length ? newMoves : moves;
     }
-    
+
     private hasStrongKnightMove(moves: string[], turn: string) {
         if (turn === 'w') {
             if (moves.indexOf('Nf3') !== -1) {
@@ -116,7 +145,7 @@ export class CompetitionPlayer implements IPlayer {
             }
         }
     }
-    
+
     private hasPawnCenterControlMove(moves: string[], turn: string): string {
         if (turn === 'w') {
             if (moves.indexOf('e4') !== -1) {
