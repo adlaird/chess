@@ -63,7 +63,8 @@ export class CompetitionPlayer implements IPlayer {
         return this.chooseFromTopMoves(tiedTopMoves, game);
     }
 
-    private chooseFromTopMoves(moves: string[], game: IChessJs): string {
+    // public for testing
+    public chooseFromTopMoves(moves: string[], game: IChessJs): string {
         const turn = game.turn();
 
         if (moves.length === 1) {
@@ -72,13 +73,13 @@ export class CompetitionPlayer implements IPlayer {
             return this.hasPawnCenterControlMove(moves, turn);
         } else if (this.hasStrongKnightMove(moves, turn)) {
             return this.hasStrongKnightMove(moves, turn);
-        } else if (this.hasBishopCentroControlMove(moves, turn)) {
-            return this.hasBishopCentroControlMove(moves, turn);
+        } else if (this.hasBishopCenterControlMove(moves, turn)) {
+            return this.hasBishopCenterControlMove(moves, turn);
         } else if (this.hasCastleMove(moves, turn)) {
             return this.hasCastleMove(moves, turn);
         }
 
-        moves = this.removeWeakMoves(moves, game.turn());
+        moves = this.removeWeakMoves(moves, turn);
 
         return this.getRandomMove(moves);
     }
@@ -91,7 +92,7 @@ export class CompetitionPlayer implements IPlayer {
         }
     }
 
-    private hasBishopCentroControlMove(moves: string[], turn: string) {
+    private hasBishopCenterControlMove(moves: string[], turn: string) {
         if (turn === 'w') {
             if (moves.indexOf('Bc4') !== -1) {
                 return 'Bc4';
