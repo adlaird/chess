@@ -4,7 +4,7 @@ import { IChessJs } from '../IChessJs';
 import _ from 'lodash';
 
 export class CompetitionPlayer implements IPlayer {
-    MAX_DEPTH = 3;
+    MAX_DEPTH = 2;
     name: string;
 
     constructor() {
@@ -60,6 +60,8 @@ export class CompetitionPlayer implements IPlayer {
             return evaluatedMove.pieceDiff === topMove.pieceDiff;
         }).map((filteredMove) => filteredMove.move);
 
+        console.log('fen: ' + game.fen());
+        console.log(tiedTopMoves)
         return this.chooseFromTopMoves(tiedTopMoves, game);
     }
 
