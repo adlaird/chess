@@ -23,4 +23,16 @@ describe('CompetitionPlayer', () => {
     const move = player.chooseMove('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1');
     expect(move).toBe('e5');
   });
+
+  it('should meet d4 with d5 on the first move as black', () => {
+    const player = new CompetitionPlayer();
+    const move = player.chooseMove('rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1');
+    expect(move).toBe('d5');
+  });
+
+  it('should develop knight after king pawn opening', () => {
+    const player = new CompetitionPlayer();
+    const move = player.chooseMove('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2');
+    expect(move).toBe('Nf3');
+  });
 });
