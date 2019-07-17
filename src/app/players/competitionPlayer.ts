@@ -73,10 +73,8 @@ export class CompetitionPlayer implements IPlayer {
             return moves[0];
         } else if (this.hasPawnCenterControlMove(moves, turn)) {
             return this.hasPawnCenterControlMove(moves, turn);
-        } else if (this.hasStrongKnightMove(moves, turn)) {
-            return this.hasStrongKnightMove(moves, turn);
-        } else if (this.hasBishopCenterControlMove(moves, turn)) {
-            return this.hasBishopCenterControlMove(moves, turn);
+        } else if (this.hasDevelopmentMove(moves, game)) {
+            return this.hasDevelopmentMove(moves, game);
         } else if (this.hasCastleMove(moves, turn)) {
             return this.hasCastleMove(moves, turn);
         }
@@ -84,6 +82,159 @@ export class CompetitionPlayer implements IPlayer {
         moves = this.removeWeakMoves(moves, turn);
 
         return this.getRandomMove(moves);
+    }
+   
+    private hasDevelopmentMove(moves: string[], game: IChessJs): string {
+        const undevelopedSquares = this.findUndevelopedPieceSquares(game);
+
+        if (undevelopedSquares) {
+            if (game.turn() === 'w') {
+                if (undevelopedSquares.indexOf('b1') !== -1) {
+                    if (moves.indexOf('Nc3') !== -1) {
+                        return 'Nc3'
+                    } else if (moves.indexOf('Nd2') !== -1) {
+                        return 'Nd2';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('g1') !== -1) {
+                    if (moves.indexOf('Nf3') !== -1) {
+                        return 'Nf3'
+                    } else if (moves.indexOf('Ne2') !== -1) {
+                        return 'Ne2';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('f1') !== -1) {
+                    if (moves.indexOf('Bb5') !== -1) {
+                        return 'Bb5'
+                    } else if (moves.indexOf('Bc4') !== -1) {
+                        return 'Bc4';
+                    } else if (moves.indexOf('Bg2') !== -1) {
+                        return 'Bg2';
+                    } else if (moves.indexOf('Bd3') !== -1) {
+                        return 'Bd3';
+                    } else if (moves.indexOf('Be2') !== -1) {
+                        return 'Be2';
+                    }
+                }
+
+                if (undevelopedSquares.indexOf('c1') !== -1) {
+                    if (moves.indexOf('Bf5') !== -1) {
+                        return 'Bf5'
+                    } else if (moves.indexOf('Be4') !== -1) {
+                        return 'Be4';
+                    } else if (moves.indexOf('Bb2') !== -1) {
+                        return 'Bb2';
+                    } else if (moves.indexOf('Be3') !== -1) {
+                        return 'Be3';
+                    } else if (moves.indexOf('Bd2') !== -1) {
+                        return 'Bd2';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('d1') !== -1) {
+                    return moves.find((move) => {
+                        return move.indexOf('Q') === 1;
+                    });
+                }
+            } else {
+                if (undevelopedSquares.indexOf('b8') !== -1) {
+                    if (moves.indexOf('Nc6') !== -1) {
+                        return 'Nc6'
+                    } else if (moves.indexOf('Nd7') !== -1) {
+                        return 'Nd7';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('g8') !== -1) {
+                    if (moves.indexOf('Nf6') !== -1) {
+                        return 'Nf6'
+                    } else if (moves.indexOf('Ne7') !== -1) {
+                        return 'Ne7';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('f8') !== -1) {
+                    if (moves.indexOf('Bb4') !== -1) {
+                        return 'Bb4'
+                    } else if (moves.indexOf('Bc5') !== -1) {
+                        return 'Bc5';
+                    } else if (moves.indexOf('Bg7') !== -1) {
+                        return 'Bg7';
+                    } else if (moves.indexOf('Bd6') !== -1) {
+                        return 'Bd6';
+                    } else if (moves.indexOf('Be7') !== -1) {
+                        return 'Be7';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('c8') !== -1) {
+                    if (moves.indexOf('Bf4') !== -1) {
+                        return 'Bf4'
+                    } else if (moves.indexOf('Be5') !== -1) {
+                        return 'Be5';
+                    } else if (moves.indexOf('Bb7') !== -1) {
+                        return 'Bb7';
+                    } else if (moves.indexOf('Be6') !== -1) {
+                        return 'Be6';
+                    } else if (moves.indexOf('Bd7') !== -1) {
+                        return 'Bd7';
+                    }
+                }
+                
+                if (undevelopedSquares.indexOf('d8') !== -1) {
+                    return moves.find((move) => {
+                        return move.indexOf('Q') === 1;
+                    });
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private findUndevelopedPieceSquares(game: IChessJs): string[] {
+        const undevelopedSquares: string[] = [];
+        let knightSquares: string[] = [],
+            bishopSquares: string[] = [],
+            queenSquares: string[] = [];
+        
+        if (game.turn() === 'w') {
+            knightSquares = ['b1', 'g1'];
+            bishopSquares = ['c1', 'f1'];
+            queenSquares = ['d1'];
+        } else {
+            knightSquares = ['b8', 'g8'];
+            bishopSquares = ['c8', 'f8'];
+            queenSquares = ['d8'];
+        }
+
+        knightSquares.forEach((square) => {
+            const piece = game.get(square);
+
+            if (piece && piece.color === game.turn() && piece.type === game.KNIGHT) {
+                undevelopedSquares.push(square);
+            }
+        });
+
+        bishopSquares.forEach((square) => {
+            const piece = game.get(square);
+
+            if (piece && piece.color === game.turn() && piece.type === game.BISHOP) {
+                undevelopedSquares.push(square);
+            }
+        });
+
+        queenSquares.forEach((square) => {
+            const piece = game.get(square);
+
+            if (piece && piece.color === game.turn() && piece.type === game.QUEEN) {
+                undevelopedSquares.push(square);
+            }
+        });
+
+        return undevelopedSquares;
     }
 
     private hasCastleMove(moves: string[], turn: string) {
