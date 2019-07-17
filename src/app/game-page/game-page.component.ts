@@ -4,6 +4,7 @@ import { IPlayer } from '../players/IPlayer';
 import { stringify } from '@angular/compiler/src/util';
 import { CompetitionPlayer } from '../players/competitionPlayer';
 import Chess from '../../../node_modules/chess.js';
+import { SplitEvaluationPlayer } from '../players/splitEvaluationPlayer';
 
 const WHITE = 'w';
 
@@ -97,7 +98,7 @@ export class GamePageComponent implements OnInit {
 
   startGame(): void {
     this.gameCount++;
-    this.playerWhite = new CompetitionPlayer();
+    this.playerWhite = new SplitEvaluationPlayer();
     this.playerBlack = new CompetitionPlayer();
 
     this.chessGame = new Chess() as IChessJs;
