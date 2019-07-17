@@ -80,6 +80,22 @@ export class EngineTesterComponent implements OnInit {
       {
         fen: 'r1bqk2r/pppp1ppp/2n5/4P3/1bB1n3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6',
         expectedMove: 'Nxc3'
+      },
+      {
+        fen: 'r1bq1k1r/p1pp2pp/1pn5/4P3/1b2Q3/2N2N2/PPP2PPP/R1B1K2R b KQ - 0 9',
+        expectedMove: 'Bxc3+'
+      },
+      {
+        fen: 'r2qk2r/pbpp2pp/1pn5/4P3/1b2QB2/2N2N2/PPP2PPP/R4RK1 b - - 3 11',
+        expectedMove: 'Bxc3'
+      },
+      {
+        fen: 'r2qkr2/p1pp2pp/bpQ5/4P3/1b3B2/2N2N2/PPP2PPP/R2R2K1 b - - 0 13',
+        expectedMove: 'dxc6'
+      },
+      {
+        fen: 'Q3k3/p1pq2pp/bp6/4P3/1b3r2/2N2N2/PPP2PPP/R5K1 b - - 0 15',
+        expectedMove: 'Qc8'
       }
     ];
 
