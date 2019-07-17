@@ -234,32 +234,6 @@ export class CompetitionPlayer implements IPlayer {
         }
     }
 
-    private getBestCapture(game: IChessJs): string {
-        const captures = this.getCaptures(game.moves());
-
-        if (captures && captures.length) {
-            let evaluatedCaptures = captures.map((capture) => {
-                return {
-                    move: capture,
-                    difference: this.calculateDifference(capture, game)
-                };
-            });
-
-            evaluatedCaptures = evaluatedCaptures.sort((a, b) => a.difference - b.difference);
-
-            return evaluatedCaptures[0].move;
-        } else {
-            return null;
-        }
-    }
-
-    private calculateDifference(capture: string, game: IChessJs): number {
-        const capturingPiece = this.getCapturingPiece(capture);
-        const capturedPiece = this.getCapturedPiece(capture, game);
-        const pieceDifference = this.getPieceValue(capturingPiece) - this.getPieceValue(capturedPiece);
-        return pieceDifference;
-    }
-
     private getCapturedPiece(capture: string, game: IChessJs): string {
         const splitCapture = capture.split('x');
 
@@ -274,34 +248,6 @@ export class CompetitionPlayer implements IPlayer {
             return piece.type;
         } else {
             // en-passant
-            return 'p';
-        }
-    }
-
-    private getCaptures(moves: string[]): string[] {
-        const captures: string[] = [];
-
-        moves.forEach((move) => {
-            if (move.indexOf('x') !== -1) {
-                captures.push(move);
-            }
-        });
-
-        return captures;
-    }
-
-    private getCapturingPiece(capture: string): string {
-        const splitCapture = capture.split('x');
-
-        if (splitCapture.length !== 2) {
-            return null;
-        }
-
-        const leftSide = splitCapture[0];
-
-        if (['K', 'Q', 'R', 'B', 'N'].indexOf(leftSide) !== -1) {
-            return leftSide.toLowerCase();
-        } else {
             return 'p';
         }
     }
