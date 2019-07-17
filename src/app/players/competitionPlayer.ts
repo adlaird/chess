@@ -4,7 +4,7 @@ import { IChessJs } from '../IChessJs';
 import _ from 'lodash';
 
 export class CompetitionPlayer implements IPlayer {
-    MAX_DEPTH = 2;
+    MAX_DEPTH = 3;
     name: string;
 
     constructor() {
