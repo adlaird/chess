@@ -3,11 +3,11 @@ import Chess from '../../../node_modules/chess.js';
 import { IChessJs } from '../IChessJs';
 import _ from 'lodash';
 
-export class CompetitionPlayer implements IPlayer {
+export class SplitEvaluationPlayer implements IPlayer {
     name: string;
 
     constructor() {
-        this.name = 'Competition Player';
+        this.name = 'Split Evaluation Player';
     }
 
     public chooseMove(fen: string) {
@@ -59,7 +59,7 @@ export class CompetitionPlayer implements IPlayer {
         let evaluatedCaptureMoves = captureMoves.map((move) => {
             return {
                 move,
-                pieceDiff: this.evaluateMoveWithDepth(move, game, 1, 2)
+                pieceDiff: this.evaluateMoveWithDepth(move, game, 1, 3)
             };
         });
 
@@ -223,7 +223,18 @@ export class CompetitionPlayer implements IPlayer {
         if (depth === maxDepth || pieceDiff === 1000) {
             return pieceDiff;
         } else {
-            const nextMoves = clonedGame.moves();
+            const nextMoves  = clonedGame.moves();
+            const captureMoves: string[] = [];
+            const nonCaptureMoves: string[] = [];
+
+            nextMoves.forEach((nextMove) => {
+                if (nextMove.indexOf('x') !== -1) {
+                    captureMoves.push(move);
+                } else {
+                    nonCaptureMoves.push(move);
+                }
+            });
+
             const evaluatedMoves = nextMoves.map((nextMove) => {
                 return this.evaluateMoveWithDepth(nextMove, clonedGame, depth + 1, maxDepth);
             });
