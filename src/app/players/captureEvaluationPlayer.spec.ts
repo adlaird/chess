@@ -17,10 +17,4 @@ describe('CaptureEvaluationPlayer', () => {
       const player = new CaptureEvaluationPlayer();
       expect(player).not.toBeNull();
   });
-
-  it('should play exd5', () => {
-    const player = new CaptureEvaluationPlayer();
-    const move = player.chooseMove('rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2');
-    expect(move).toBe('exd5');
-  });
 });
