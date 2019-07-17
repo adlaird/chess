@@ -35,4 +35,10 @@ describe('CompetitionPlayer', () => {
     const move = player.chooseMove('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2');
     expect(move).toBe('Nf3');
   });
+
+  it('should develop protect pawn with knight after Nf3', () => {
+    const player = new CompetitionPlayer();
+    const move = player.chooseMove('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2');
+    expect(move).toBe('Nc3');
+  });
 });

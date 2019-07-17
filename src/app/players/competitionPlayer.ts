@@ -229,6 +229,8 @@ export class CompetitionPlayer implements IPlayer {
             return 'd5';
         } else if (fen === 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2' && game.turn() === 'w') {
             return 'Nf3';
+        } else if (fen === 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2' && game.turn() !== 'w') {
+            return 'Nc6';
         }
     }
 
