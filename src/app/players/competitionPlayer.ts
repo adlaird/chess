@@ -116,6 +116,10 @@ export class CompetitionPlayer implements IPlayer {
                         return 'Bd3';
                     } else if (moves.indexOf('Be2') !== -1) {
                         return 'Be2';
+                    } else if (moves.indexOf('e3') !== -1) {
+                        return 'e3';
+                    } else if (moves.indexOf('g3') !== -1) {
+                        return 'g3';
                     }
                 }
 
@@ -130,6 +134,10 @@ export class CompetitionPlayer implements IPlayer {
                         return 'Be3';
                     } else if (moves.indexOf('Bd2') !== -1) {
                         return 'Bd2';
+                    } else if (moves.indexOf('d3') !== -1) {
+                        return 'd3';
+                    } else if (moves.indexOf('b3') !== -1) {
+                        return 'b3';
                     }
                 }
                 
@@ -166,6 +174,10 @@ export class CompetitionPlayer implements IPlayer {
                         return 'Bd6';
                     } else if (moves.indexOf('Be7') !== -1) {
                         return 'Be7';
+                    } else if (moves.indexOf('e6') !== -1) {
+                        return 'e6';
+                    } else if (moves.indexOf('g6') !== -1) {
+                        return 'g6';
                     }
                 }
                 
@@ -180,6 +192,10 @@ export class CompetitionPlayer implements IPlayer {
                         return 'Be6';
                     } else if (moves.indexOf('Bd7') !== -1) {
                         return 'Bd7';
+                    } else if (moves.indexOf('d6') !== -1) {
+                        return 'd6';
+                    } else if (moves.indexOf('b6') !== -1) {
+                        return 'b6';
                     }
                 }
                 
