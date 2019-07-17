@@ -77,6 +77,10 @@ export class EngineTesterComponent implements OnInit {
         fen: '8/3k4/8/6pB/R7/P7/1B3K2/5N2 b - - 2 30',
         expectedMove: 'g4'
       },
+      {
+        fen: 'r1bqk2r/pppp1ppp/2n5/4P3/1bB1n3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6',
+        expectedMove: 'Nxc3'
+      }
     ];
 
     this.player = new CompetitionPlayer();
