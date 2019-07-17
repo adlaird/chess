@@ -24,7 +24,7 @@ export class GamePageComponent implements OnInit {
   gameResults: number[] = [];
   moves: any;
   legalMoves: any;
-  stockfish: any;
+  // stockfish: any;
   turn: any;
   whiteWins = 0;
 
@@ -33,33 +33,33 @@ export class GamePageComponent implements OnInit {
   finalPGN: string;
 
   ngOnInit(): void {
-    this.stockfish = new Worker('stockfish.js');
+    // this.stockfish = new Worker('stockfish.js');
 
-    this.stockfish.onmessage = function onmessage(event) {
-      const message: string = event.data;
+    // this.stockfish.onmessage = function onmessage(event) {
+    //   const message: string = event.data;
 
-      if (message.startsWith('info depth 15')) {
-        const resultSpans = Array.from(document.getElementsByClassName('result'));
+    //   if (message.startsWith('info depth 15')) {
+    //     const resultSpans = Array.from(document.getElementsByClassName('result'));
 
-        for (const result of resultSpans) {
-          if (result.innerHTML === '') {
-            const parts = message.split(' ');
+    //     for (const result of resultSpans) {
+    //       if (result.innerHTML === '') {
+    //         const parts = message.split(' ');
 
-            if (parts[8] === 'mate') {
-              const mateIn = parseInt(parts[9], 10);
-              if (mateIn > 0) {
-                result.innerHTML = `W in ${mateIn}`;
-              } else {
-                result.innerHTML = `B in ${mateIn}`;
-              }
-            } else {
-              result.innerHTML = stringify(parseInt(parts[9], 10) / 100);
-            }
-            break;
-          }
-        }
-      }
-    };
+    //         if (parts[8] === 'mate') {
+    //           const mateIn = parseInt(parts[9], 10);
+    //           if (mateIn > 0) {
+    //             result.innerHTML = `W in ${mateIn}`;
+    //           } else {
+    //             result.innerHTML = `B in ${mateIn}`;
+    //           }
+    //         } else {
+    //           result.innerHTML = stringify(parseInt(parts[9], 10) / 100);
+    //         }
+    //         break;
+    //       }
+    //     }
+    //   }
+    // };
   }
 
   compileResults(): void {
@@ -153,9 +153,9 @@ export class GamePageComponent implements OnInit {
 
       this.draws++;
     } else {
-      this.stockfish.postMessage('ucinewgame');
-      this.stockfish.postMessage(`position fen ${fen}`);
-      this.stockfish.postMessage('go depth 15');
+      // this.stockfish.postMessage('ucinewgame');
+      // this.stockfish.postMessage(`position fen ${fen}`);
+      // this.stockfish.postMessage('go depth 15');
     }
   }
 
