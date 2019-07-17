@@ -284,6 +284,7 @@ export class CompetitionPlayer implements IPlayer {
             moves = this.removeKnightEdgeMoves(moves);
             moves = this.removeKingMoves(moves);
             moves = this.removeOutsidePawnMoves(moves);
+            //king should move back
         }
 
         return moves;
@@ -398,6 +399,8 @@ export class CompetitionPlayer implements IPlayer {
             return 'Nf3';
         } else if (fen === 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2' && game.turn() !== 'w') {
             return 'Nc6';
+        } else if (fen === 'r1bqk2r/pppp1ppp/2n5/4P3/1bB1n3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6' && game.turn() !== 'w') {
+            return 'Nxc3';
         }
     }
 
