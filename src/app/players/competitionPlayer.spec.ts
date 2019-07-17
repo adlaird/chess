@@ -1,4 +1,5 @@
 import { CompetitionPlayer } from './competitionPlayer';
+import Chess from '../../../node_modules/chess.js';
 
 describe('CompetitionPlayer', () => {
   it('should exist', () => {
@@ -40,5 +41,13 @@ describe('CompetitionPlayer', () => {
     const player = new CompetitionPlayer();
     const move = player.chooseMove('rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2');
     expect(move).toBe('Nc3');
+  });
+
+  describe('top move selection', () => {
+    it('does not move the king', () => {
+      const player = new CompetitionPlayer();
+      const move = player.chooseFromTopMoves(['Ke7', 'Bc8'], new Chess('Q3k3/p1pq2pp/bp6/4P3/1b3r2/2N2N2/PPP2PPP/R5K1 b - - 0 15'));
+      expect(move).toBe('Bc8');
+    });
   });
 });
