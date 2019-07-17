@@ -52,7 +52,7 @@ export interface IChessJs {
 
     put: () => any;
 
-    get: (square: string) => any;
+    get: (square: string) => IChessPiece;
 
     remove: () => any;
 
@@ -61,4 +61,9 @@ export interface IChessJs {
     square_color: () => string;
 
     history: () => any;
+}
+
+interface IChessPiece {
+    color: string;
+    type: string;
 }
