@@ -23,26 +23,4 @@ describe('CompetitionPlayer', () => {
     const move = player.chooseMove('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1');
     expect(move).toBe('e5');
   });
-
-  
-  it('should not move the knight', () => {
-    debugger;
-    const player = new CompetitionPlayer();
-    const move = player.chooseMove('r1b1k1nr/pppp1ppp/2n2q2/1Bb5/3pP3/8/PPP2PPP/RNBQK1NR b KQkq - 3 6');
-    expect(move).not.toBe('Nb4');
-  });
-
-  it('should meet f4 with d5', () => {
-    const player = new CompetitionPlayer();
-    const move = player.chooseMove('rnbqkbnr/pppppppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1');
-    expect(move).toBe('d5');
-  });
-
-  // describe('chooseFromTopMoves', () => {
-  //   it('should play a developing move', () => {
-  //     const player = new CompetitionPlayer();
-  //     const moves = 
-  //     player.chooseFromTopMoves()
-  //   })
-  // });
 });
